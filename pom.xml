@@ -13,6 +13,9 @@
         <module>my-common-db</module>
         <module>my-service-api</module>
         <module>my-service</module>
+        <module>my-gateway</module>
+        <module>my-web</module>
+        <module>my-transaction-fescar</module>
     </modules>
 
     <packaging>pom</packaging>
