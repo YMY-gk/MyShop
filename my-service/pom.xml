@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>my-service-goods</module>
+        <module>my-service-file</module>
     </modules>
 
     <properties>
