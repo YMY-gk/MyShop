@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbTemplate;
-import com.baomidou.mapper.TbTemplateMapper;
-import com.baomidou.service.ITbTemplateService;
+import com.me.goods.pojo.TbTemplate;
+import com.me.goods.mapper.TbTemplateMapper;
+import com.me.goods.service.ITbTemplateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbTemplateServiceImpl extends ServiceImpl<TbTemplateMapper, TbTemplate> implements ITbTemplateService {

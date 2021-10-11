@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbCategoryBrand;
-import com.baomidou.mapper.TbCategoryBrandMapper;
-import com.baomidou.service.ITbCategoryBrandService;
+import com.me.goods.pojo.TbCategoryBrand;
+import com.me.goods.mapper.TbCategoryBrandMapper;
+import com.me.goods.service.ITbCategoryBrandService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbCategoryBrandServiceImpl extends ServiceImpl<TbCategoryBrandMapper, TbCategoryBrand> implements ITbCategoryBrandService {

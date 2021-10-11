@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbBrand;
-import com.baomidou.mapper.TbBrandMapper;
-import com.baomidou.service.ITbBrandService;
+import com.me.goods.pojo.TbBrand;
+import com.me.goods.mapper.TbBrandMapper;
+import com.me.goods.service.ITbBrandService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbBrandServiceImpl extends ServiceImpl<TbBrandMapper, TbBrand> implements ITbBrandService {

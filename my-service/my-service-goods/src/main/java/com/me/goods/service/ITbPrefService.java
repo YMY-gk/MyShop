@@ -1,6 +1,6 @@
-package com.baomidou.service;
+package com.me.goods.service;
 
-import com.baomidou.entity.TbPref;
+import com.me.goods.pojo.TbPref;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 public interface ITbPrefService extends IService<TbPref> {
 

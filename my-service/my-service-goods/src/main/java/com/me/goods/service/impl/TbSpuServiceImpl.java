@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbSpu;
-import com.baomidou.mapper.TbSpuMapper;
-import com.baomidou.service.ITbSpuService;
+import com.me.goods.pojo.TbSpu;
+import com.me.goods.mapper.TbSpuMapper;
+import com.me.goods.service.ITbSpuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbSpuServiceImpl extends ServiceImpl<TbSpuMapper, TbSpu> implements ITbSpuService {

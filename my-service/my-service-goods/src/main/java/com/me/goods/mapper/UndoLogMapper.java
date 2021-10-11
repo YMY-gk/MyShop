@@ -1,6 +1,6 @@
-package com.baomidou.mapper;
+package com.me.goods.mapper;
 
-import com.baomidou.entity.UndoLog;
+import com.me.goods.pojo.UndoLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 public interface UndoLogMapper extends BaseMapper<UndoLog> {
 

@@ -1,6 +1,6 @@
-package com.baomidou.mapper;
+package com.me.goods.mapper;
 
-import com.baomidou.entity.TbBrand;
+import com.me.goods.pojo.TbBrand;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 public interface TbBrandMapper extends BaseMapper<TbBrand> {
 

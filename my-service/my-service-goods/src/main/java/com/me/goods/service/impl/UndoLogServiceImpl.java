@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.UndoLog;
-import com.baomidou.mapper.UndoLogMapper;
-import com.baomidou.service.IUndoLogService;
+import com.me.goods.pojo.UndoLog;
+import com.me.goods.mapper.UndoLogMapper;
+import com.me.goods.service.IUndoLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class UndoLogServiceImpl extends ServiceImpl<UndoLogMapper, UndoLog> implements IUndoLogService {

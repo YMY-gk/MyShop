@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbAlbum;
-import com.baomidou.mapper.TbAlbumMapper;
-import com.baomidou.service.ITbAlbumService;
+import com.me.goods.pojo.TbAlbum;
+import com.me.goods.mapper.TbAlbumMapper;
+import com.me.goods.service.ITbAlbumService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbAlbumServiceImpl extends ServiceImpl<TbAlbumMapper, TbAlbum> implements ITbAlbumService {

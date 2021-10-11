@@ -1,4 +1,4 @@
-package com.baomidou.entity;
+package com.me.goods.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

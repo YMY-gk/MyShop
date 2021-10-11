@@ -1,8 +1,8 @@
-package com.baomidou.service.impl;
+package com.me.goods.service.impl;
 
-import com.baomidou.entity.TbPref;
-import com.baomidou.mapper.TbPrefMapper;
-import com.baomidou.service.ITbPrefService;
+import com.me.goods.pojo.TbPref;
+import com.me.goods.mapper.TbPrefMapper;
+import com.me.goods.service.ITbPrefService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author guokui
- * @since 2021-10-10
+ * @since 2021-10-11
  */
 @Service
 public class TbPrefServiceImpl extends ServiceImpl<TbPrefMapper, TbPref> implements ITbPrefService {

@@ -109,17 +109,17 @@ public class CodeGenerator {
             mpg.setDataSource(dsc);
 
 //        // TODO 包配置
-//            PackageConfig pc = new PackageConfig();
-//            //pc.setModuleName(scanner("模块名"));
-//            pc.setParent("com.me.goods");
-//            pc.setEntity("pojo");
-//            pc.setMapper("mapper");
-//            pc.setService("service");
-//            pc.setServiceImpl("service.impl");
-//            pc.setController("controller");
-//            mpg.setPackageInfo(pc);
+            PackageConfig pc = new PackageConfig();
+            //pc.setModuleName(scanner("模块名"));
+            pc.setParent("com.me.goods");
+            pc.setEntity("pojo");
+            pc.setMapper("mapper");
+            pc.setService("service");
+            pc.setServiceImpl("service.impl");
+            pc.setController("controller");
+            mpg.setPackageInfo(pc);
 //            TemplateConfig  tc = new TemplateConfig();
-//
+
 //            tc.disable(TemplateType.ENTITY);
 //            tc.setEntity("/templates/entity.java");
 //            tc.setService("/templates/service.java");
@@ -128,8 +128,8 @@ public class CodeGenerator {
 //            tc.setXml("/templates/mapper.xml");
 //            tc.setController("/templates/controller.java");
 //            mpg.setTemplate(tc);
-            mpg.setPackageInfo(null);
-            mpg.setTemplate(null);
+//            mpg.setPackageInfo(null);
+//            mpg.setTemplate(null);
             // 自定义配置
             InjectionConfig cfg = new InjectionConfig() {
                 @Override
@@ -214,7 +214,7 @@ public class CodeGenerator {
 
             cfg.setFileOutConfigList(focList);
             mpg.setCfg(cfg);
-         //   mpg.setTemplate(new TemplateConfig().setXml(null).setController(null));
+            mpg.setTemplate(new TemplateConfig().setXml(null).setController(null).setEntity(null).setEntityKt(null).setService(null).setServiceImpl(null).setMapper(null));
 
             // 策略配置
             StrategyConfig strategy = new StrategyConfig();
