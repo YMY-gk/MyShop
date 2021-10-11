@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
  * @since 2021-10-11
  */
 @Controller
-@RequestMapping("/tb-album")
+@RequestMapping("/album")
 public class TbAlbumController {
 
 }
