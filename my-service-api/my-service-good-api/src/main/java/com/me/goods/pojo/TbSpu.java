@@ -29,7 +29,7 @@ public class TbSpu extends Model<TbSpu> {
      * 主键
      */
     @TableId("id")
-    private String id;
+    private Long id;
 
     /**
      * 货号

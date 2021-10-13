@@ -1,6 +1,12 @@
 package com.me.goods.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbPara;
+import com.me.goods.pojo.UndoLog;
+import com.me.goods.service.impl.UndoLogServiceImpl;
+import com.mysql.cj.util.StringUtils;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +29,7 @@ import java.util.List;
 public class UndoLogController {
 
     @Autowired
-    private UndoLogService undoLogService;
+    private UndoLogServiceImpl undoLogService;
 
     /***
      * UndoLog分页条件搜索实现
@@ -33,9 +39,14 @@ public class UndoLogController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@RequestBody(required = false)  UndoLog undoLog, @PathVariable int page, @PathVariable  int size){
+    public Result<Page> findPage(@RequestBody(required = false)  UndoLog undoLog, @PathVariable int page, @PathVariable  int size){
         //调用UndoLogService实现分页条件查询UndoLog
-        PageInfo<UndoLog> pageInfo = undoLogService.findPage(undoLog, page, size);
+        QueryWrapper< UndoLog > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(undoLog.getExt()), UndoLog::getExt, undoLog.getExt())
+        ;
+        Page< UndoLog > pagez = new Page<>(page, size);
+        Page<UndoLog> pageInfo = undoLogService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -46,10 +57,12 @@ public class UndoLogController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
+    public Result<Page> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用UndoLogService实现分页查询UndoLog
-        PageInfo<UndoLog> pageInfo = undoLogService.findPage(page, size);
-        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
+
+        Page< UndoLog > pagez = new Page<>(page, size);
+        Page<UndoLog> pageInfo = undoLogService.page(pagez);
+        return new Result<Page>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***
@@ -60,7 +73,11 @@ public class UndoLogController {
     @PostMapping(value = "/search" )
     public Result< List<UndoLog> > findList(@RequestBody(required = false)  UndoLog undoLog){
         //调用UndoLogService实现条件查询UndoLog
-        List<UndoLog> list = undoLogService.findList(undoLog);
+        QueryWrapper< UndoLog > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(undoLog.getExt()), UndoLog::getExt, undoLog.getExt())
+        ;
+        List<UndoLog> list = undoLogService.list(queryWrapper);
         return new Result<List<UndoLog>>(true,StatusCode.OK,"查询成功",list);
     }
 
@@ -72,7 +89,7 @@ public class UndoLogController {
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Long id){
         //调用UndoLogService实现根据主键删除
-        undoLogService.delete(id);
+        undoLogService.removeById(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
 
@@ -83,11 +100,11 @@ public class UndoLogController {
      * @return
      */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody  UndoLog undoLog,@PathVariable Long id){
+    public Result update(@RequestBody UndoLog undoLog, @PathVariable Long id){
         //设置主键值
         undoLog.setId(id);
         //调用UndoLogService实现修改UndoLog
-        undoLogService.update(undoLog);
+        undoLogService.updateById(undoLog);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
@@ -99,7 +116,7 @@ public class UndoLogController {
     @PostMapping
     public Result add(@RequestBody   UndoLog undoLog){
         //调用UndoLogService实现添加UndoLog
-        undoLogService.add(undoLog);
+        undoLogService.save(undoLog);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 
@@ -111,7 +128,7 @@ public class UndoLogController {
     @GetMapping("/{id}")
     public Result<UndoLog> findById(@PathVariable Long id){
         //调用UndoLogService实现根据主键查询UndoLog
-        UndoLog undoLog = undoLogService.findById(id);
+        UndoLog undoLog = undoLogService.getById(id);
         return new Result<UndoLog>(true,StatusCode.OK,"查询成功",undoLog);
     }
 
@@ -122,7 +139,7 @@ public class UndoLogController {
     @GetMapping
     public Result<List<UndoLog>> findAll(){
         //调用UndoLogService实现查询所有UndoLog
-        List<UndoLog> list = undoLogService.findAll();
+        List<UndoLog> list = undoLogService.list();
         return new Result<List<UndoLog>>(true, StatusCode.OK,"查询成功",list) ;
     }
 }

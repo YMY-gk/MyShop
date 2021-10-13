@@ -1,6 +1,12 @@
 package com.me.goods.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbSpec;
+import com.me.goods.pojo.TbSpu;
+import com.me.goods.service.impl.TbSpecServiceImpl;
+import com.mysql.cj.util.StringUtils;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +29,7 @@ import java.util.List;
 public class TbSpecController {
 
     @Autowired
-    private SpecService specService;
+    private TbSpecServiceImpl specService;
 
     /***
      * Spec分页条件搜索实现
@@ -33,9 +39,14 @@ public class TbSpecController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@RequestBody(required = false)  Spec spec, @PathVariable int page, @PathVariable  int size){
+    public Result<Page> findPage(@RequestBody(required = false) TbSpec spec, @PathVariable int page, @PathVariable  int size){
         //调用SpecService实现分页条件查询Spec
-        PageInfo<Spec> pageInfo = specService.findPage(spec, page, size);
+        QueryWrapper< TbSpec > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(spec.getName()), TbSpec::getName, spec.getName())
+        ;
+        Page< TbSpec > pagez = new Page<>(page, size);
+        Page<TbSpec> pageInfo = specService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -46,10 +57,11 @@ public class TbSpecController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
+    public Result<Page> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用SpecService实现分页查询Spec
-        PageInfo<Spec> pageInfo = specService.findPage(page, size);
-        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
+        Page< TbSpec > pagez = new Page<>(page, size);
+        Page<TbSpec> pageInfo = specService.page(pagez);
+        return new Result<Page>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***
@@ -58,10 +70,14 @@ public class TbSpecController {
      * @return
      */
     @PostMapping(value = "/search" )
-    public Result< List<Spec> > findList(@RequestBody(required = false)  Spec spec){
+    public Result< List<TbSpec> > findList(@RequestBody(required = false)  TbSpec spec){
         //调用SpecService实现条件查询Spec
-        List<Spec> list = specService.findList(spec);
-        return new Result<List<Spec>>(true,StatusCode.OK,"查询成功",list);
+        QueryWrapper< TbSpec > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(spec.getName()), TbSpec::getName, spec.getName())
+        ;
+        List<TbSpec> list = specService.list(queryWrapper);
+        return new Result<List<TbSpec>>(true,StatusCode.OK,"查询成功",list);
     }
 
     /***
@@ -72,7 +88,7 @@ public class TbSpecController {
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         //调用SpecService实现根据主键删除
-        specService.delete(id);
+        specService.removeById(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
 
@@ -83,11 +99,11 @@ public class TbSpecController {
      * @return
      */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody  Spec spec,@PathVariable Integer id){
+    public Result update(@RequestBody  TbSpec spec,@PathVariable Integer id){
         //设置主键值
         spec.setId(id);
         //调用SpecService实现修改Spec
-        specService.update(spec);
+        specService.updateById(spec);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
@@ -97,9 +113,9 @@ public class TbSpecController {
      * @return
      */
     @PostMapping
-    public Result add(@RequestBody   Spec spec){
+    public Result add(@RequestBody   TbSpec spec){
         //调用SpecService实现添加Spec
-        specService.add(spec);
+        specService.save(spec);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 
@@ -109,10 +125,11 @@ public class TbSpecController {
      * @return
      */
     @GetMapping("/{id}")
-    public Result<Spec> findById(@PathVariable Integer id){
+    public Result<TbSpec> findById(@PathVariable Integer id){
         //调用SpecService实现根据主键查询Spec
-        Spec spec = specService.findById(id);
-        return new Result<Spec>(true,StatusCode.OK,"查询成功",spec);
+
+        TbSpec spec = specService.getById(id);
+        return new Result<TbSpec>(true,StatusCode.OK,"查询成功",spec);
     }
 
     /***
@@ -120,10 +137,10 @@ public class TbSpecController {
      * @return
      */
     @GetMapping
-    public Result<List<Spec>> findAll(){
+    public Result<List<TbSpec>> findAll(){
         //调用SpecService实现查询所有Spec
-        List<Spec> list = specService.findAll();
-        return new Result<List<Spec>>(true, StatusCode.OK,"查询成功",list) ;
+        List<TbSpec> list = specService.list();
+        return new Result<List<TbSpec>>(true, StatusCode.OK,"查询成功",list) ;
     }
 
 
@@ -133,9 +150,9 @@ public class TbSpecController {
      */
 
 
-    @GetMapping("/category/{id}")
-    public Result<List<Spec>> findByCategoryId(@PathVariable(name="id") Integer id){
-        List<Spec> specList = specService.findByCategoryId(id);
-        return new Result<List<Spec>>(true,StatusCode.OK,"查询规格的列表成功",specList);
-    }
+//    @GetMapping("/category/{id}")
+//    public Result<List<TbSpec>> findByCategoryId(@PathVariable(name="id") Integer id){
+//        List<TbSpec> specList = specService.findByCategoryId(id);
+//        return new Result<List<TbSpec>>(true,StatusCode.OK,"查询规格的列表成功",specList);
+//    }
 }

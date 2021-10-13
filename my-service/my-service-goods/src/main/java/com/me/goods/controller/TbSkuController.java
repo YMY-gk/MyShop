@@ -1,6 +1,12 @@
 package com.me.goods.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbSku;
+import com.me.goods.pojo.TbSpec;
+import com.me.goods.service.impl.TbSkuServiceImpl;
+import com.mysql.cj.util.StringUtils;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +29,7 @@ import java.util.List;
 public class TbSkuController {
 
     @Autowired
-    private SkuService skuService;
+    private TbSkuServiceImpl skuService;
 
     /***
      * Sku分页条件搜索实现
@@ -33,9 +39,14 @@ public class TbSkuController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@RequestBody(required = false)  Sku sku, @PathVariable int page, @PathVariable  int size){
+    public Result<Page> findPage(@RequestBody(required = false) TbSku sku, @PathVariable int page, @PathVariable  int size){
         //调用SkuService实现分页条件查询Sku
-        PageInfo<Sku> pageInfo = skuService.findPage(sku, page, size);
+        QueryWrapper< TbSku > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(sku.getName()), TbSku::getName, sku.getName())
+        ;
+        Page< TbSku > pagez = new Page<>(page, size);
+        Page<TbSku> pageInfo = skuService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -46,10 +57,11 @@ public class TbSkuController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
+    public Result<Page> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用SkuService实现分页查询Sku
-        PageInfo<Sku> pageInfo = skuService.findPage(page, size);
-        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
+        Page< TbSku > pagez = new Page<>(page, size);
+        Page<TbSku> pageInfo = skuService.page(pagez);
+        return new Result<Page>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***
@@ -58,10 +70,14 @@ public class TbSkuController {
      * @return
      */
     @PostMapping(value = "/search" )
-    public Result< List<Sku> > findList(@RequestBody(required = false)  Sku sku){
+    public Result< List<TbSku> > findList(@RequestBody(required = false)  TbSku sku){
         //调用SkuService实现条件查询Sku
-        List<Sku> list = skuService.findList(sku);
-        return new Result<List<Sku>>(true,StatusCode.OK,"查询成功",list);
+        QueryWrapper< TbSku > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(sku.getName()), TbSku::getName, sku.getName())
+        ;
+        List<TbSku> list = skuService.list(queryWrapper);
+        return new Result<List<TbSku>>(true,StatusCode.OK,"查询成功",list);
     }
 
     /***
@@ -72,7 +88,7 @@ public class TbSkuController {
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Long id){
         //调用SkuService实现根据主键删除
-        skuService.delete(id);
+        skuService.removeById(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
 
@@ -83,11 +99,11 @@ public class TbSkuController {
      * @return
      */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody  Sku sku,@PathVariable Long id){
+    public Result update(@RequestBody  TbSku sku,@PathVariable Long id){
         //设置主键值
         sku.setId(id);
         //调用SkuService实现修改Sku
-        skuService.update(sku);
+        skuService.updateById(sku);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
@@ -97,9 +113,9 @@ public class TbSkuController {
      * @return
      */
     @PostMapping
-    public Result add(@RequestBody   Sku sku){
+    public Result add(@RequestBody   TbSku sku){
         //调用SkuService实现添加Sku
-        skuService.add(sku);
+        skuService.save(sku);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 
@@ -109,10 +125,10 @@ public class TbSkuController {
      * @return
      */
     @GetMapping("/{id}")
-    public Result<Sku> findById(@PathVariable Long id){
+    public Result<TbSku> findById(@PathVariable Long id){
         //调用SkuService实现根据主键查询Sku
-        Sku sku = skuService.findById(id);
-        return new Result<Sku>(true,StatusCode.OK,"查询成功",sku);
+        TbSku sku = skuService.getById(id);
+        return new Result<TbSku>(true,StatusCode.OK,"查询成功",sku);
     }
 
     /***
@@ -120,9 +136,9 @@ public class TbSkuController {
      * @return
      */
     @GetMapping
-    public Result<List<Sku>> findAll(){
+    public Result<List<TbSku>> findAll(){
         //调用SkuService实现查询所有Sku
-        List<Sku> list = skuService.findAll();
-        return new Result<List<Sku>>(true, StatusCode.OK,"查询成功",list) ;
+        List<TbSku> list = skuService.list();
+        return new Result<List<TbSku>>(true, StatusCode.OK,"查询成功",list) ;
     }
 }

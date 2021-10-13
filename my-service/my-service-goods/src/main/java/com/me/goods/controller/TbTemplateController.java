@@ -1,6 +1,12 @@
 package com.me.goods.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbTemplate;
+import com.me.goods.pojo.UndoLog;
+import com.me.goods.service.impl.TbTemplateServiceImpl;
+import com.mysql.cj.util.StringUtils;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +29,7 @@ import java.util.List;
 public class TbTemplateController {
 
     @Autowired
-    private TemplateService templateService;
+    private TbTemplateServiceImpl templateService;
 
     /***
      * Template分页条件搜索实现
@@ -33,9 +39,14 @@ public class TbTemplateController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@RequestBody(required = false)  Template template, @PathVariable int page, @PathVariable  int size){
+    public Result<Page> findPage(@RequestBody(required = false) TbTemplate template, @PathVariable int page, @PathVariable  int size){
         //调用TemplateService实现分页条件查询Template
-        PageInfo<Template> pageInfo = templateService.findPage(template, page, size);
+        QueryWrapper< TbTemplate > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(template.getName()), TbTemplate::getName, template.getName())
+        ;
+        Page< TbTemplate > pagez = new Page<>(page, size);
+        Page<TbTemplate> pageInfo = templateService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -46,10 +57,11 @@ public class TbTemplateController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
-    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
+    public Result<Page> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用TemplateService实现分页查询Template
-        PageInfo<Template> pageInfo = templateService.findPage(page, size);
-        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
+        Page< TbTemplate > pagez = new Page<>(page, size);
+        Page<TbTemplate> pageInfo = templateService.page(pagez);
+        return new Result<Page>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***
@@ -58,10 +70,14 @@ public class TbTemplateController {
      * @return
      */
     @PostMapping(value = "/search" )
-    public Result< List<Template> > findList(@RequestBody(required = false)  Template template){
+    public Result< List<TbTemplate> > findList(@RequestBody(required = false)  TbTemplate template){
         //调用TemplateService实现条件查询Template
-        List<Template> list = templateService.findList(template);
-        return new Result<List<Template>>(true,StatusCode.OK,"查询成功",list);
+        QueryWrapper< TbTemplate > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .like(!StringUtils.isNullOrEmpty(template.getName()), TbTemplate::getName, template.getName())
+        ;
+        List<TbTemplate> list = templateService.list(queryWrapper);
+        return new Result<List<TbTemplate>>(true,StatusCode.OK,"查询成功",list);
     }
 
     /***
@@ -72,7 +88,7 @@ public class TbTemplateController {
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         //调用TemplateService实现根据主键删除
-        templateService.delete(id);
+        templateService.removeById(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
 
@@ -83,11 +99,11 @@ public class TbTemplateController {
      * @return
      */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody  Template template,@PathVariable Integer id){
+    public Result update(@RequestBody  TbTemplate template,@PathVariable Integer id){
         //设置主键值
         template.setId(id);
         //调用TemplateService实现修改Template
-        templateService.update(template);
+        templateService.updateById(template);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
@@ -97,9 +113,9 @@ public class TbTemplateController {
      * @return
      */
     @PostMapping
-    public Result add(@RequestBody   Template template){
+    public Result add(@RequestBody   TbTemplate template){
         //调用TemplateService实现添加Template
-        templateService.add(template);
+        templateService.save(template);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 
@@ -109,10 +125,10 @@ public class TbTemplateController {
      * @return
      */
     @GetMapping("/{id}")
-    public Result<Template> findById(@PathVariable Integer id){
+    public Result<TbTemplate> findById(@PathVariable Integer id){
         //调用TemplateService实现根据主键查询Template
-        Template template = templateService.findById(id);
-        return new Result<Template>(true,StatusCode.OK,"查询成功",template);
+        TbTemplate template = templateService.getById(id);
+        return new Result<TbTemplate>(true,StatusCode.OK,"查询成功",template);
     }
 
     /***
@@ -120,9 +136,9 @@ public class TbTemplateController {
      * @return
      */
     @GetMapping
-    public Result<List<Template>> findAll(){
+    public Result<List<TbTemplate>> findAll(){
         //调用TemplateService实现查询所有Template
-        List<Template> list = templateService.findAll();
-        return new Result<List<Template>>(true, StatusCode.OK,"查询成功",list) ;
+        List<TbTemplate> list = templateService.list();
+        return new Result<List<TbTemplate>>(true, StatusCode.OK,"查询成功",list) ;
     }
 }

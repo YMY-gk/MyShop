@@ -43,10 +43,10 @@ public class TbPrefController {
         //调用PrefService实现分页条件查询Pref
         QueryWrapper< TbPref > queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(pref.ge()), TbPref::, pref.getName())
+                .eq(!StringUtils.isNullOrEmpty(pref.getState()), TbPref::getState, pref.getState())
         ;
         Page< TbPref > pagez = new Page<>(page, size);
-        Page< TbPref > pageInfo = prefService.findPage(pref, page, size);
+        Page< TbPref > pageInfo = prefService.page(pagez, queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -59,7 +59,8 @@ public class TbPrefController {
     @GetMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用PrefService实现分页查询Pref
-        Page<TbPref> pageInfo = prefService.findPage(page, size);
+        Page< TbPref > pagez = new Page<>(page, size);
+        Page< TbPref > pageInfo = prefService.page(pagez);
         return new Result<Page>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
@@ -71,7 +72,11 @@ public class TbPrefController {
     @PostMapping(value = "/search" )
     public Result< List<TbPref> > findList(@RequestBody(required = false)  TbPref pref){
         //调用PrefService实现条件查询Pref
-        List<TbPref> list = prefService.findList(pref);
+        QueryWrapper< TbPref > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(!StringUtils.isNullOrEmpty(pref.getState()), TbPref::getState, pref.getState())
+        ;
+        List<TbPref> list = prefService.list(queryWrapper);
         return new Result<List<TbPref>>(true,StatusCode.OK,"查询成功",list);
     }
 
@@ -83,7 +88,7 @@ public class TbPrefController {
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         //调用PrefService实现根据主键删除
-        prefService.delete(id);
+        prefService.removeById(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
 
@@ -98,7 +103,7 @@ public class TbPrefController {
         //设置主键值
         pref.setId(id);
         //调用PrefService实现修改Pref
-        prefService.update(pref);
+        prefService.updateById(pref);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
@@ -110,7 +115,7 @@ public class TbPrefController {
     @PostMapping
     public Result add(@RequestBody   TbPref pref){
         //调用PrefService实现添加Pref
-        prefService.add(pref);
+        prefService.save(pref);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 
@@ -122,7 +127,7 @@ public class TbPrefController {
     @GetMapping("/{id}")
     public Result<TbPref> findById(@PathVariable Integer id){
         //调用PrefService实现根据主键查询Pref
-        TbPref pref = prefService.findById(id);
+        TbPref pref = prefService.getById(id);
         return new Result<TbPref>(true,StatusCode.OK,"查询成功",pref);
     }
 
@@ -133,7 +138,7 @@ public class TbPrefController {
     @GetMapping
     public Result<List<TbPref>> findAll(){
         //调用PrefService实现查询所有Pref
-        List<TbPref> list = prefService.findAll();
+        List<TbPref> list = prefService.list();
         return new Result<List<TbPref>>(true, StatusCode.OK,"查询成功",list) ;
     }
 }

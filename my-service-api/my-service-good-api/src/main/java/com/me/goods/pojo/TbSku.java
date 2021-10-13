@@ -30,7 +30,7 @@ public class TbSku extends Model<TbSku> {
      * 商品id
      */
     @TableId("id")
-    private String id;
+    private Long id;
 
     /**
      * 商品条码
