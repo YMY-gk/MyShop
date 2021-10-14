@@ -55,13 +55,13 @@ public class TbPref extends Model<TbPref> {
      * 活动开始日期
      */
     @TableField("start_time")
-    private LocalDate startTime;
+    private String startTime;
 
     /**
      * 活动截至日期
      */
     @TableField("end_time")
-    private LocalDate endTime;
+    private String endTime;
 
     /**
      * 类型

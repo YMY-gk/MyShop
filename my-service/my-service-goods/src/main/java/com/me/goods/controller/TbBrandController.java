@@ -3,6 +3,7 @@ package com.me.goods.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbAlbum;
 import com.me.goods.pojo.TbBrand;
 import com.me.goods.service.impl.TbBrandServiceImpl;
 import com.mysql.cj.util.StringUtils;
@@ -10,6 +11,7 @@ import entity.Result;
 import entity.StatusCode;
 import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -96,10 +98,7 @@ public class TbBrandController {
      */
     @PostMapping("/search")
     public Result<List<TbBrand>> findList(@RequestBody  TbBrand brand){
-        QueryWrapper<TbBrand> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(brand.getId()!=null,TbBrand::getId,brand.getId())
-                .like(!StringUtils.isNullOrEmpty(brand.getName()),TbBrand::getName,brand.getName())
-                .eq(!StringUtils.isNullOrEmpty(brand.getLetter()),TbBrand::getLetter,brand.getLetter());
+        QueryWrapper<TbBrand> queryWrapper =createExample(brand);
         List<TbBrand> brands =  brandService.list(queryWrapper);
         return new Result(true,StatusCode.OK,"条件查询成功",brands);
     }
@@ -126,13 +125,25 @@ public class TbBrandController {
      */
     @PostMapping("/search/{page}/{size}")
     public Result<Page<TbBrand>> findPage(@PathVariable(value="page")Integer page,@PathVariable(value="size") Integer size,@RequestBody  TbBrand brand){
-        QueryWrapper<TbBrand> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(brand.getId()!=null,TbBrand::getId,brand.getId())
-                .like(!StringUtils.isNullOrEmpty(brand.getName()),TbBrand::getName,brand.getName())
-                .eq(!StringUtils.isNullOrEmpty(brand.getLetter()),TbBrand::getLetter,brand.getLetter());
+        QueryWrapper<TbBrand> queryWrapper =createExample(brand);
         Page<TbBrand> pagez = new Page<>(page,size);
         Page<TbBrand> info = brandService.page(pagez,queryWrapper);
         return new Result<Page<TbBrand>>(true,StatusCode.OK,"分页查询成功",info);
     }
-
+    /**
+     * Album构建查询对象
+     * @param brand
+     * @return
+     */
+    private   QueryWrapper< TbBrand > createExample(TbBrand brand){
+        QueryWrapper< TbBrand > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(brand.getId() != null, TbBrand::getId, brand.getId())
+                .like(!StringUtils.isNullOrEmpty(brand.getName()), TbBrand::getName, brand.getName())
+                .eq(!StringUtils.isNullOrEmpty(brand.getImage()), TbBrand::getImage, brand.getImage())
+                .eq(!StringUtils.isNullOrEmpty(brand.getLetter()), TbBrand::getLetter, brand.getLetter())
+                .eq(brand.getSeq()!=null, TbBrand::getSeq, brand.getSeq())
+        ;
+        return queryWrapper;
+    }
 }

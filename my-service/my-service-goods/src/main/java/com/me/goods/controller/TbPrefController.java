@@ -141,4 +141,20 @@ public class TbPrefController {
         List<TbPref> list = prefService.list();
         return new Result<List<TbPref>>(true, StatusCode.OK,"查询成功",list) ;
     }
+
+    public QueryWrapper createExample(TbPref pref){
+        QueryWrapper< TbPref > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(!StringUtils.isNullOrEmpty(pref.getState()), TbPref::getState, pref.getState())
+                .eq(!StringUtils.isNullOrEmpty(pref.getStartTime()), TbPref::getStartTime, pref.getStartTime())
+                .eq(!StringUtils.isNullOrEmpty(pref.getEndTime()), TbPref::getEndTime, pref.getEndTime())
+                .eq(!StringUtils.isNullOrEmpty(pref.getType()), TbPref::getType, pref.getType())
+                .eq(pref.getId()!=null, TbPref::getId, pref.getId())
+                .eq(pref.getCateId()!=null, TbPref::getCateId, pref.getCateId())
+                .eq(pref.getBuyMoney()!=null, TbPref::getBuyMoney, pref.getBuyMoney())
+                .eq(pref.getPreMoney()!=null, TbPref::getPreMoney, pref.getPreMoney())
+        ;
+
+        return queryWrapper;
+    }
 }

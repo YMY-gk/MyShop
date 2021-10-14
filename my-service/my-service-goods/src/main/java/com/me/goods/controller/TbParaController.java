@@ -44,10 +44,7 @@ public class TbParaController {
     @PostMapping(value = "/search/{page}/{size}")
     public Result< Page > findPage(@RequestBody(required = false) TbPara para, @PathVariable int page, @PathVariable int size) {
         //调用ParaService实现分页条件查询Para
-        QueryWrapper< TbPara > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(para.getName()), TbPara::getName, para.getName())
-        ;
+        QueryWrapper< TbPara > queryWrapper = createExample(para);
         Page< TbPara > pagez = new Page<>(page, size);
         Page<TbPara> pageInfo = paraService.page(pagez, queryWrapper);
         return new Result(true, StatusCode.OK, "查询成功", pageInfo);
@@ -75,10 +72,7 @@ public class TbParaController {
     @PostMapping(value = "/search")
     public Result< List<TbPara> > findList(@RequestBody(required = false) TbPara para) {
         //调用ParaService实现条件查询Para
-        QueryWrapper< TbPara > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(para.getName()), TbPara::getName, para.getName())
-        ;
+        QueryWrapper< TbPara > queryWrapper = createExample(para);
         List<TbPara> list = paraService.list(queryWrapper);
         return new Result<List<TbPara>>(true, StatusCode.OK, "查询成功", list);
     }
@@ -161,6 +155,24 @@ public class TbParaController {
         List<TbPara> list = paraService.list(queryWrapper);
         return new Result<List<TbPara>>(true, StatusCode.OK, "参数列表查询成功", list);
     }
-
+    /**
+     * Para构建查询对象
+     *
+     * @param para
+     * @return
+     */
+    public QueryWrapper createExample(TbPara para) {
+        QueryWrapper< TbPara > queryWrapper = new QueryWrapper<>();
+        if (para != null) {
+            queryWrapper.lambda()
+                    .eq(para.getId() != null, TbPara::getId, para.getId())
+                    .eq(para.getSeq() != null, TbPara::getSeq, para.getSeq())
+                    .eq(para.getTemplateId() != null, TbPara::getTemplateId, para.getTemplateId())
+                    .eq(!StringUtils.isNullOrEmpty(para.getOptions()), TbPara::getOptions, para.getOptions())
+                    .like(!StringUtils.isNullOrEmpty(para.getName()), TbPara::getName, para.getName())
+            ;
+        }
+        return queryWrapper;
+    }
 
 }

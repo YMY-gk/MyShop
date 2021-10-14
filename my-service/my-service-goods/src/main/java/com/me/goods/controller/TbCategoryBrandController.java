@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.me.goods.pojo.TbAlbum;
 import com.me.goods.pojo.TbCategoryBrand;
 import com.me.goods.service.impl.TbCategoryBrandServiceImpl;
-import com.mysql.cj.util.StringUtils;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -41,11 +41,7 @@ public class TbCategoryBrandController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result< Page > findPage(@RequestBody(required = false) TbCategoryBrand categoryBrand, @PathVariable int page, @PathVariable  int size){
         //调用CategoryBrandService实现分页条件查询CategoryBrand
-        QueryWrapper< TbCategoryBrand > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(categoryBrand.getCategoryId() != null, TbCategoryBrand::getCategoryId, categoryBrand.getCategoryId())
-                .eq(categoryBrand.getBrandId() != null, TbCategoryBrand::getBrandId, categoryBrand.getBrandId())
-              ;
+        QueryWrapper< TbCategoryBrand > queryWrapper = createExample(categoryBrand);
         Page< TbCategoryBrand > pagez = new Page<>(page, size);
         Page<TbCategoryBrand> pageInfo = categoryBrandService.page(pagez, queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -73,11 +69,7 @@ public class TbCategoryBrandController {
     @PostMapping(value = "/search" )
     public Result< List<TbCategoryBrand> > findList(@RequestBody(required = false)  TbCategoryBrand categoryBrand){
         //调用CategoryBrandService实现条件查询CategoryBrand
-        QueryWrapper< TbCategoryBrand > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(categoryBrand.getCategoryId() != null, TbCategoryBrand::getCategoryId, categoryBrand.getCategoryId())
-                .eq(categoryBrand.getBrandId() != null, TbCategoryBrand::getBrandId, categoryBrand.getBrandId())
-        ;
+        QueryWrapper< TbCategoryBrand > queryWrapper = createExample(categoryBrand);
         List<TbCategoryBrand> list = categoryBrandService.list(queryWrapper);
         return new Result<List<TbCategoryBrand>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -143,4 +135,19 @@ public class TbCategoryBrandController {
         List<TbCategoryBrand> list = categoryBrandService.list();
         return new Result<List<TbCategoryBrand>>(true, StatusCode.OK,"查询成功",list) ;
     }
+
+    /**
+     * CategoryBrand构建查询对象
+     * @param categoryBrand
+     * @return
+     */
+    public QueryWrapper createExample(TbCategoryBrand categoryBrand){
+        QueryWrapper< TbCategoryBrand > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(categoryBrand.getCategoryId() != null, TbCategoryBrand::getCategoryId, categoryBrand.getCategoryId())
+                .eq(categoryBrand.getBrandId() != null, TbCategoryBrand::getBrandId, categoryBrand.getBrandId())
+        ;
+        return queryWrapper;
+    }
+
 }

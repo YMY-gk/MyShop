@@ -42,10 +42,7 @@ public class TbCategoryController {
     @PostMapping(value = "/search/{page}/{size}")
     public Result< Page > findPage(@RequestBody(required = false) TbCategory category, @PathVariable int page, @PathVariable int size) {
         //调用CategoryService实现分页条件查询Category
-        QueryWrapper< TbCategory > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(category.getName()), TbCategory::getName, category.getName())
-        ;
+        QueryWrapper< TbCategory > queryWrapper =createExample(category);
         Page< TbCategory > pagez = new Page<>(page, size);
         Page< TbCategory > pageInfo = categoryService.page(pagez, queryWrapper);
         return new Result(true, StatusCode.OK, "查询成功", pageInfo);
@@ -73,10 +70,7 @@ public class TbCategoryController {
     @PostMapping(value = "/search")
     public Result< List< TbCategory > > findList(@RequestBody(required = false) TbCategory category) {
         //调用CategoryService实现条件查询Category
-        QueryWrapper< TbCategory > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(category.getName()), TbCategory::getName, category.getName())
-        ;
+        QueryWrapper< TbCategory > queryWrapper =createExample(category);
         List< TbCategory > list = categoryService.list(queryWrapper);
         return new Result< List< TbCategory > >(true, StatusCode.OK, "查询成功", list);
     }
@@ -158,5 +152,24 @@ public class TbCategoryController {
         ;
         List< TbCategory > categoryList = categoryService.list(queryWrapper);
         return new Result< List< TbCategory > >(true, StatusCode.OK, "查询分类列表成功", categoryList);
+    }
+    /**
+     * Category构建查询对象
+     * @param category
+     * @return
+     */
+    public QueryWrapper createExample(TbCategory category){
+        QueryWrapper< TbCategory > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(category.getId() != null, TbCategory::getId, category.getId())
+                .eq(category.getGoodsNum() != null, TbCategory::getGoodsNum, category.getGoodsNum())
+                .eq(!StringUtils.isNullOrEmpty(category.getIsShow()), TbCategory::getIsShow, category.getIsShow())
+                .eq(!StringUtils.isNullOrEmpty(category.getIsMenu()), TbCategory::getIsMenu, category.getIsMenu())
+                .eq(category.getSeq()!= null, TbCategory::getSeq, category.getSeq())
+                .eq(category.getParentId()!= null, TbCategory::getParentId, category.getParentId())
+                .eq(category.getTemplateId()!= null, TbCategory::getTemplateId, category.getTemplateId())
+                .like(!StringUtils.isNullOrEmpty(category.getName()) , TbCategory::getName, category.getName())
+        ;
+        return queryWrapper;
     }
 }

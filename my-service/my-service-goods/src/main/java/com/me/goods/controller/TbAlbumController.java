@@ -41,9 +41,7 @@ public class TbAlbumController {
     @PostMapping(value = "/search/{page}/{size}")
     public Result< Page<TbAlbum> > findPage(@RequestBody(required = false) TbAlbum album, @PathVariable int page, @PathVariable int size) {
         //调用AlbumService实现分页条件查询Album
-        QueryWrapper< TbAlbum > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(album.getId() != null, TbAlbum::getId, album.getId())
-                .like(!StringUtils.isNullOrEmpty(album.getTitle()), TbAlbum::getTitle, album.getTitle());
+        QueryWrapper< TbAlbum > queryWrapper = createExample(album);
         Page< TbAlbum > pagez = new Page<>(page, size);
         Page< TbAlbum > pageInfo = albumService.page(pagez,queryWrapper );
         return new Result(true, StatusCode.OK, "查询成功", pageInfo);
@@ -71,9 +69,7 @@ public class TbAlbumController {
     @PostMapping(value = "/search")
     public Result< List< TbAlbum > > findList(@RequestBody(required = false) TbAlbum album) {
         //调用AlbumService实现条件查询Album
-        QueryWrapper< TbAlbum > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(album.getId() != null, TbAlbum::getId, album.getId())
-                .like(!StringUtils.isNullOrEmpty(album.getTitle()), TbAlbum::getTitle, album.getTitle());
+        QueryWrapper< TbAlbum > queryWrapper = createExample(album);
         List< TbAlbum > list = albumService.list(queryWrapper);
         return new Result< List< TbAlbum > >(true, StatusCode.OK, "查询成功", list);
     }
@@ -138,5 +134,20 @@ public class TbAlbumController {
         //调用AlbumService实现查询所有Album
         List< TbAlbum > list = albumService.list();
         return new Result< List< TbAlbum > >(true, StatusCode.OK, "查询成功", list);
+    }
+    /**
+     * Album构建查询对象
+     * @param album
+     * @return
+     */
+    private   QueryWrapper< TbAlbum > createExample(TbAlbum album){
+        QueryWrapper< TbAlbum > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(album.getId() != null, TbAlbum::getId, album.getId())
+                .like(!StringUtils.isNullOrEmpty(album.getTitle()), TbAlbum::getTitle, album.getTitle())
+                .eq(!StringUtils.isNullOrEmpty(album.getImage()), TbAlbum::getImage, album.getImage())
+                .eq(!StringUtils.isNullOrEmpty(album.getImageItems()), TbAlbum::getImageItems, album.getImageItems())
+        ;
+        return queryWrapper;
     }
 }
