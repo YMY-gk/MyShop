@@ -41,10 +41,8 @@ public class TbPrefController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false)  TbPref pref, @PathVariable int page, @PathVariable  int size){
         //调用PrefService实现分页条件查询Pref
-        QueryWrapper< TbPref > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(!StringUtils.isNullOrEmpty(pref.getState()), TbPref::getState, pref.getState())
-        ;
+        QueryWrapper< TbPref > queryWrapper = createExample(pref);
+
         Page< TbPref > pagez = new Page<>(page, size);
         Page< TbPref > pageInfo = prefService.page(pagez, queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -72,10 +70,7 @@ public class TbPrefController {
     @PostMapping(value = "/search" )
     public Result< List<TbPref> > findList(@RequestBody(required = false)  TbPref pref){
         //调用PrefService实现条件查询Pref
-        QueryWrapper< TbPref > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(!StringUtils.isNullOrEmpty(pref.getState()), TbPref::getState, pref.getState())
-        ;
+        QueryWrapper< TbPref > queryWrapper = createExample(pref);
         List<TbPref> list = prefService.list(queryWrapper);
         return new Result<List<TbPref>>(true,StatusCode.OK,"查询成功",list);
     }

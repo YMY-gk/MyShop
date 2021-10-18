@@ -1,11 +1,9 @@
-package com.me.goods.pojo;
+package com.me.content.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -18,39 +16,57 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author guokui
- * @since 2021-10-11
+ * @since 2021-10-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("undo_log")
-public class UndoLog extends Model<UndoLog> {
+@TableName("tb_content")
+public class TbContent extends Model<TbContent> {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键id
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @TableField("branch_id")
-    private Long branchId;
+    /**
+     * 内容目录id
+     */
+    @TableField("category_id")
+    private Long categoryId;
 
-    @TableField("xid")
-    private String xid;
+    /**
+     * 标题
+     */
+    @TableField("title")
+    private String title;
 
-    @TableField("rollback_info")
-    private Blob rollbackInfo;
+    /**
+     * 链接
+     */
+    @TableField("url")
+    private String url;
 
-    @TableField("log_status")
-    private Integer logStatus;
+    /**
+     * 图片路径
+     */
+    @TableField("pic")
+    private String pic;
 
-    @TableField("log_created")
-    private Long logCreated;
+    /**
+     * 状态
+     */
+    @TableField("status")
+    private Integer status;
 
-    @TableField("log_modified")
-    private Long logModified;
-
-    @TableField("ext")
-    private String ext;
+    /**
+     * 排序
+     */
+    @TableField("sortOrder")
+    private Integer sortorder;
 
 
     @Override

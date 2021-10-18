@@ -4,7 +4,7 @@ package com.me.goods.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.me.goods.pojo.TbSpec;
-import com.me.goods.pojo.TbSpu;
+import com.me.goods.pojo.TbSpec;
 import com.me.goods.service.impl.TbSpecServiceImpl;
 import com.mysql.cj.util.StringUtils;
 import entity.Result;
@@ -41,10 +41,8 @@ public class TbSpecController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false) TbSpec spec, @PathVariable int page, @PathVariable  int size){
         //调用SpecService实现分页条件查询Spec
-        QueryWrapper< TbSpec > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(spec.getName()), TbSpec::getName, spec.getName())
-        ;
+        QueryWrapper< TbSpec > queryWrapper =createExample( spec);
+
         Page< TbSpec > pagez = new Page<>(page, size);
         Page<TbSpec> pageInfo = specService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -72,10 +70,7 @@ public class TbSpecController {
     @PostMapping(value = "/search" )
     public Result< List<TbSpec> > findList(@RequestBody(required = false)  TbSpec spec){
         //调用SpecService实现条件查询Spec
-        QueryWrapper< TbSpec > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(spec.getName()), TbSpec::getName, spec.getName())
-        ;
+        QueryWrapper< TbSpec > queryWrapper =createExample( spec);
         List<TbSpec> list = specService.list(queryWrapper);
         return new Result<List<TbSpec>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -155,4 +150,21 @@ public class TbSpecController {
 //        List<TbSpec> specList = specService.findByCategoryId(id);
 //        return new Result<List<TbSpec>>(true,StatusCode.OK,"查询规格的列表成功",specList);
 //    }
+
+    /**
+     * Album构建查询对象
+     * @param spec
+     * @return
+     */
+    private   QueryWrapper< TbSpec > createExample(TbSpec spec){
+        QueryWrapper< TbSpec > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(spec.getId() != null, TbSpec::getId, spec.getId())
+                .eq(spec.getSeq() != null, TbSpec::getSeq, spec.getSeq())
+                .eq(spec.getTemplateId() != null, TbSpec::getTemplateId, spec.getTemplateId())
+                .like(!StringUtils.isNullOrEmpty(spec.getName()), TbSpec::getName, spec.getName())
+                .eq(!StringUtils.isNullOrEmpty(spec.getOptions()), TbSpec::getOptions, spec.getOptions())
+        ;
+        return queryWrapper;
+    }
 }

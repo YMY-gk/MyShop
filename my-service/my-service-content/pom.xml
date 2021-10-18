@@ -3,19 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>MyShop</artifactId>
+        <artifactId>my-service</artifactId>
         <groupId>com.me</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>my-service</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>my-service-goods</module>
-        <module>my-service-file</module>
-        <module>my-service-content</module>
-    </modules>
+    <artifactId>my-service-content</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -24,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.me</groupId>
-            <artifactId>my-common-db</artifactId>
+            <artifactId>my-service-api-content</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

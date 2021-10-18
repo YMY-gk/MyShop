@@ -41,10 +41,7 @@ public class TbTemplateController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false) TbTemplate template, @PathVariable int page, @PathVariable  int size){
         //调用TemplateService实现分页条件查询Template
-        QueryWrapper< TbTemplate > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(template.getName()), TbTemplate::getName, template.getName())
-        ;
+        QueryWrapper< TbTemplate > queryWrapper = createExample(template);
         Page< TbTemplate > pagez = new Page<>(page, size);
         Page<TbTemplate> pageInfo = templateService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -72,10 +69,8 @@ public class TbTemplateController {
     @PostMapping(value = "/search" )
     public Result< List<TbTemplate> > findList(@RequestBody(required = false)  TbTemplate template){
         //调用TemplateService实现条件查询Template
-        QueryWrapper< TbTemplate > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(template.getName()), TbTemplate::getName, template.getName())
-        ;
+        QueryWrapper< TbTemplate > queryWrapper = createExample(template);
+
         List<TbTemplate> list = templateService.list(queryWrapper);
         return new Result<List<TbTemplate>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -140,5 +135,21 @@ public class TbTemplateController {
         //调用TemplateService实现查询所有Template
         List<TbTemplate> list = templateService.list();
         return new Result<List<TbTemplate>>(true, StatusCode.OK,"查询成功",list) ;
+    }
+
+    /**
+     * Album构建查询对象
+     * @param template
+     * @return
+     */
+    private   QueryWrapper< TbTemplate > createExample(TbTemplate template){
+        QueryWrapper< TbTemplate > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(template.getId() != null, TbTemplate::getId, template.getId())
+                .eq(template.getParaNum() != null, TbTemplate::getParaNum, template.getParaNum())
+                .eq(template.getSpecNum() != null, TbTemplate::getSpecNum, template.getSpecNum())
+                .like(!StringUtils.isNullOrEmpty(template.getName()), TbTemplate::getName, template.getName())
+        ;
+        return queryWrapper;
     }
 }

@@ -3,8 +3,9 @@ package com.me.goods.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.dto.Goods;
 import com.me.goods.pojo.TbSpu;
-import com.me.goods.pojo.TbTemplate;
+import com.me.goods.pojo.TbSpu;
 import com.me.goods.service.impl.TbSpuServiceImpl;
 import com.mysql.cj.util.StringUtils;
 import entity.Result;
@@ -41,10 +42,7 @@ public class TbSpuController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false)  TbSpu spu, @PathVariable int page, @PathVariable  int size){
         //调用SpuService实现分页条件查询Spu
-        QueryWrapper< TbSpu > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(spu.getName()), TbSpu::getName, spu.getName())
-        ;
+        QueryWrapper< TbSpu > queryWrapper = createExample(spu);
         Page< TbSpu > pagez = new Page<>(page, size);
         Page< TbSpu > pageInfo = spuService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -72,10 +70,7 @@ public class TbSpuController {
     @PostMapping(value = "/search" )
     public Result< List<TbSpu> > findList(@RequestBody(required = false)  TbSpu spu){
         //调用SpuService实现条件查询Spu
-        QueryWrapper< TbSpu > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(spu.getName()), TbSpu::getName, spu.getName())
-        ;
+        QueryWrapper< TbSpu > queryWrapper = createExample(spu);
         List<TbSpu> list = spuService.list(queryWrapper);
         return new Result<List<TbSpu>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -142,9 +137,9 @@ public class TbSpuController {
         return new Result<List<TbSpu>>(true, StatusCode.OK,"查询成功",list) ;
     }
 
-//    /**
-//     * Goods(SPU+SKU)增加方法详情
-//     */
+    /**
+     * Goods(SPU+SKU)增加方法详情
+     */
 //    @PostMapping("/save")
 //    public Result save(@RequestBody Goods goods){
 //        spuService.save(goods);
@@ -190,6 +185,34 @@ public class TbSpuController {
 //    }
 
 
-
+    /**
+     * Album构建查询对象
+     * @param spu
+     * @return
+     */
+    private   QueryWrapper< TbSpu > createExample(TbSpu spu){
+        QueryWrapper< TbSpu > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(spu.getId() != null, TbSpu::getId, spu.getId())
+                .eq(spu.getBrandId() != null, TbSpu::getBrandId, spu.getBrandId())
+                .eq(spu.getCategory1Id() != null, TbSpu::getCategory1Id, spu.getCategory1Id())
+                .eq(spu.getCategory2Id() != null, TbSpu::getCategory2Id, spu.getCategory2Id())
+                .eq(spu.getCategory3Id() != null, TbSpu::getCategory3Id, spu.getCategory3Id())
+                .eq(spu.getCommentNum() != null, TbSpu::getCommentNum, spu.getCommentNum())
+                .eq(spu.getFreightId() != null, TbSpu::getFreightId, spu.getFreightId())
+                .eq(spu.getTemplateId() != null, TbSpu::getTemplateId, spu.getTemplateId())
+                .like(!StringUtils.isNullOrEmpty(spu.getName()), TbSpu::getName, spu.getName())
+                .eq(!StringUtils.isNullOrEmpty(spu.getCaption()), TbSpu::getCaption, spu.getCaption())
+                .eq(!StringUtils.isNullOrEmpty(spu.getImage()), TbSpu::getImage, spu.getImage())
+                .eq(!StringUtils.isNullOrEmpty(spu.getImages()), TbSpu::getImages, spu.getImages())
+                .eq(!StringUtils.isNullOrEmpty(spu.getIntroduction()), TbSpu::getIntroduction, spu.getIntroduction())
+                .eq(!StringUtils.isNullOrEmpty(spu.getIsEnableSpec()), TbSpu::getIsEnableSpec, spu.getIsEnableSpec())
+                .eq(!StringUtils.isNullOrEmpty(spu.getIsMarketable()), TbSpu::getIsMarketable, spu.getIsMarketable())
+                .eq(!StringUtils.isNullOrEmpty(spu.getParaItems()), TbSpu::getParaItems, spu.getParaItems())
+                .eq(!StringUtils.isNullOrEmpty(spu.getSaleService()), TbSpu::getSaleService, spu.getSaleService())
+                .eq(!StringUtils.isNullOrEmpty(spu.getSn()), TbSpu::getSn, spu.getSn())
+        ;
+        return queryWrapper;
+    }
 
 }

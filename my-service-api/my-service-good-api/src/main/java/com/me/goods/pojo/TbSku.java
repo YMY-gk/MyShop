@@ -84,19 +84,19 @@ public class TbSku extends Model<TbSku> {
      * 创建时间
      */
     @TableField("create_time")
-    private String createTime;
+    private Long createTime;
 
     /**
      * 更新时间
      */
     @TableField("update_time")
-    private String updateTime;
+    private Long updateTime;
 
     /**
      * SPUID
      */
     @TableField("spu_id")
-    private String spuId;
+    private Long spuId;
 
     /**
      * 类目ID

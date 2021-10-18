@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.me.goods.pojo.TbSku;
 import com.me.goods.pojo.TbSpec;
+import com.me.goods.pojo.TbSku;
 import com.me.goods.service.impl.TbSkuServiceImpl;
 import com.mysql.cj.util.StringUtils;
 import entity.Result;
@@ -41,10 +42,8 @@ public class TbSkuController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false) TbSku sku, @PathVariable int page, @PathVariable  int size){
         //调用SkuService实现分页条件查询Sku
-        QueryWrapper< TbSku > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(sku.getName()), TbSku::getName, sku.getName())
-        ;
+        QueryWrapper< TbSku > queryWrapper = createExample(sku);
+
         Page< TbSku > pagez = new Page<>(page, size);
         Page<TbSku> pageInfo = skuService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -72,10 +71,7 @@ public class TbSkuController {
     @PostMapping(value = "/search" )
     public Result< List<TbSku> > findList(@RequestBody(required = false)  TbSku sku){
         //调用SkuService实现条件查询Sku
-        QueryWrapper< TbSku > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(sku.getName()), TbSku::getName, sku.getName())
-        ;
+        QueryWrapper< TbSku > queryWrapper = createExample(sku);
         List<TbSku> list = skuService.list(queryWrapper);
         return new Result<List<TbSku>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -140,5 +136,35 @@ public class TbSkuController {
         //调用SkuService实现查询所有Sku
         List<TbSku> list = skuService.list();
         return new Result<List<TbSku>>(true, StatusCode.OK,"查询成功",list) ;
+    }
+    /**
+     * Album构建查询对象
+     * @param sku
+     * @return
+     */
+    private   QueryWrapper< TbSku > createExample(TbSku sku){
+        QueryWrapper< TbSku > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(sku.getId() != null, TbSku::getId, sku.getId())
+                .eq(sku.getSpuId() != null, TbSku::getSpuId, sku.getSpuId())
+                .eq(sku.getAlertNum() != null, TbSku::getAlertNum, sku.getAlertNum())
+                .eq(sku.getCategoryId() != null, TbSku::getCategoryId, sku.getCategoryId())
+                .eq(sku.getNum() != null, TbSku::getNum, sku.getNum())
+                .eq(sku.getCommentNum() != null, TbSku::getCommentNum, sku.getCommentNum())
+                .eq(sku.getSaleNum() != null, TbSku::getSaleNum, sku.getSaleNum())
+                .eq(sku.getVersion() != null, TbSku::getVersion, sku.getVersion())
+                .eq(sku.getWeight() != null, TbSku::getWeight, sku.getWeight())
+                .eq(sku.getCreateTime() != null, TbSku::getCreateTime, sku.getCreateTime())
+                .eq(sku.getUpdateTime() != null, TbSku::getUpdateTime, sku.getUpdateTime())
+                .like(!StringUtils.isNullOrEmpty(sku.getName()), TbSku::getName, sku.getName())
+                .eq(!StringUtils.isNullOrEmpty(sku.getBrandName()), TbSku::getBrandName, sku.getBrandName())
+                .eq(!StringUtils.isNullOrEmpty(sku.getImage()), TbSku::getImage, sku.getImage())
+                .eq(!StringUtils.isNullOrEmpty(sku.getImages()), TbSku::getImages, sku.getImages())
+                .eq(!StringUtils.isNullOrEmpty(sku.getCategoryName()), TbSku::getCategoryName, sku.getCategoryName())
+                .eq(!StringUtils.isNullOrEmpty(sku.getSpec()), TbSku::getSpec, sku.getSpec())
+                .eq(!StringUtils.isNullOrEmpty(sku.getStatus()), TbSku::getStatus, sku.getStatus())
+                .eq(!StringUtils.isNullOrEmpty(sku.getSn()), TbSku::getSn, sku.getSn())
+        ;
+        return queryWrapper;
     }
 }

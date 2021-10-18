@@ -26,7 +26,7 @@ public class CodeGenerator {
     /**
      * 数据库用户名 密码 url 及注释中author的配置
      */
-    private static String url="jdbc:mysql://182.254.221.85:3306/t_goods?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8";
+    private static String url="jdbc:mysql://182.254.221.85:3306/t_content?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8";
     private static String username="root";
     private static String password="ROOT_mysql_3306";
     private static String driverName="com.mysql.cj.jdbc.Driver";
@@ -45,7 +45,7 @@ public class CodeGenerator {
         //获得元数据
         DatabaseMetaData metaData = connection.getMetaData();
         //获得表信息
-        ResultSet tables = metaData.getTables("t_goods", "t_goods", null, new String[]{"TABLE"});
+        ResultSet tables = metaData.getTables("t_content", "t_content", null, new String[]{"TABLE"});
 
         while (tables.next()) {
             Map<String, String> columnNameMap = new HashMap<>(); //保存字段名
@@ -61,8 +61,8 @@ public class CodeGenerator {
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        String prefixDao = "/my-service-api/my-service-good-api";
-        String prefixService = "/my-service/my-service-goods";
+        String prefixDao = "/my-service-api/my-service-api-content";
+        String prefixService = "/my-service/my-service-content";
         List<String > list=getAllTableColumn();
         for (String table:list) {
             // 代码生成器
@@ -74,8 +74,9 @@ public class CodeGenerator {
             String projectPathDao = System.getProperty("user.dir") + prefixDao;
             //生成service的路径
             String projectPathService = System.getProperty("user.dir") + prefixService;
-            String xml = "/src/main/resources/mapper/goods/";
-            String java = "/src/main/java/com/me/goods/";
+            String xml = "/src/main/resources/mapper/content/";
+            String java = "/src/main/java/com/me/content/";
+            String parent = "com.me.content";
             gc.setOutputDir(projectPathService + "/src/main/java");
 //        // TODO 设置用户名
             gc.setAuthor(author);
@@ -111,7 +112,7 @@ public class CodeGenerator {
 //        // TODO 包配置
             PackageConfig pc = new PackageConfig();
             //pc.setModuleName(scanner("模块名"));
-            pc.setParent("com.me.goods");
+            pc.setParent(parent);
             pc.setEntity("pojo");
             pc.setMapper("mapper");
             pc.setService("service");

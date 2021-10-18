@@ -16,6 +16,7 @@
         <module>my-gateway</module>
         <module>my-web</module>
         <module>my-transaction-fescar</module>
+        <module>my-service-api/my-service-api-content</module>
     </modules>
 
     <packaging>pom</packaging>

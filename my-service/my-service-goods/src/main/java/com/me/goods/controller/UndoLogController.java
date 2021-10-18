@@ -3,6 +3,7 @@ package com.me.goods.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.me.goods.pojo.TbAlbum;
 import com.me.goods.pojo.TbPara;
 import com.me.goods.pojo.UndoLog;
 import com.me.goods.service.impl.UndoLogServiceImpl;
@@ -41,10 +42,7 @@ public class UndoLogController {
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<Page> findPage(@RequestBody(required = false)  UndoLog undoLog, @PathVariable int page, @PathVariable  int size){
         //调用UndoLogService实现分页条件查询UndoLog
-        QueryWrapper< UndoLog > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(undoLog.getExt()), UndoLog::getExt, undoLog.getExt())
-        ;
+        QueryWrapper< UndoLog > queryWrapper = createExample(undoLog);
         Page< UndoLog > pagez = new Page<>(page, size);
         Page<UndoLog> pageInfo = undoLogService.page(pagez,queryWrapper);
         return new Result(true, StatusCode.OK,"查询成功",pageInfo);
@@ -73,10 +71,7 @@ public class UndoLogController {
     @PostMapping(value = "/search" )
     public Result< List<UndoLog> > findList(@RequestBody(required = false)  UndoLog undoLog){
         //调用UndoLogService实现条件查询UndoLog
-        QueryWrapper< UndoLog > queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .like(!StringUtils.isNullOrEmpty(undoLog.getExt()), UndoLog::getExt, undoLog.getExt())
-        ;
+        QueryWrapper< UndoLog > queryWrapper = createExample(undoLog);
         List<UndoLog> list = undoLogService.list(queryWrapper);
         return new Result<List<UndoLog>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -141,5 +136,24 @@ public class UndoLogController {
         //调用UndoLogService实现查询所有UndoLog
         List<UndoLog> list = undoLogService.list();
         return new Result<List<UndoLog>>(true, StatusCode.OK,"查询成功",list) ;
+    }
+    /**
+     * Album构建查询对象
+     * @param undoLog
+     * @return
+     */
+    private   QueryWrapper< UndoLog > createExample(UndoLog undoLog){
+        QueryWrapper< UndoLog > queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(undoLog.getId() != null, UndoLog::getId, undoLog.getId())
+                .eq(undoLog.getLogModified() != null, UndoLog::getLogModified, undoLog.getLogModified())
+                .eq(undoLog.getLogCreated() != null, UndoLog::getLogCreated, undoLog.getLogCreated())
+                .eq(undoLog.getLogStatus() != null, UndoLog::getLogStatus, undoLog.getLogStatus())
+                .eq(undoLog.getRollbackInfo() != null, UndoLog::getRollbackInfo, undoLog.getRollbackInfo())
+                .eq(undoLog.getBranchId() != null, UndoLog::getBranchId, undoLog.getBranchId())
+                .eq(!StringUtils.isNullOrEmpty(undoLog.getXid()), UndoLog::getXid, undoLog.getXid())
+                .eq(!StringUtils.isNullOrEmpty(undoLog.getExt()), UndoLog::getExt, undoLog.getExt())
+        ;
+        return queryWrapper;
     }
 }
