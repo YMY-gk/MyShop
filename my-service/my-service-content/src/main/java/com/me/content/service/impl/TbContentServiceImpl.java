@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2021-10-18
  */
 @Service
-public class TbContentServiceImpl extends ServiceImpl<TbContentMapper, TbContent> implements ITbContentService {
+public class TbContentServiceImpl  {
 
 }

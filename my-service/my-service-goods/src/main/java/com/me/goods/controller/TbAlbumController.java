@@ -4,7 +4,6 @@ package com.me.goods.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.me.goods.pojo.TbAlbum;
-import com.me.goods.pojo.TbBrand;
 import com.me.goods.service.impl.TbAlbumServiceImpl;
 import com.mysql.cj.util.StringUtils;
 import entity.Result;

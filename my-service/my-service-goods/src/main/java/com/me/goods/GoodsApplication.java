@@ -1,23 +1,22 @@
-package com.me;
+package com.me.goods;
 
-import com.xpand.starter.canal.annotation.EnableCanalClient;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
- * canal的客户端 目的:监听服务端的数据的变化
+ *
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableEurekaClient
-//启用canal
-@EnableCanalClient
-@EnableFeignClients(basePackages = "com.me.content.feign")
-public class CanalApplication {
+@ComponentScan(basePackages = "com.me")
+@MapperScan("com.me.goods.mapper")
+public class GoodsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CanalApplication.class,args);
+        SpringApplication.run(GoodsApplication.class, args);
     }
 }
