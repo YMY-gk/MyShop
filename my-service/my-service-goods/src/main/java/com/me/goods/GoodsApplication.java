@@ -10,10 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  *
  */
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = "com.me")
-@MapperScan("com.me.goods.mapper")
+@MapperScan("com.me.goods")
 public class GoodsApplication {
 
     public static void main(String[] args) {

@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author guokui
  * @since 2021-10-18
  */
-@Mapper
+
 public interface TbContentMapper extends BaseMapper<TbContent> {
 
 }

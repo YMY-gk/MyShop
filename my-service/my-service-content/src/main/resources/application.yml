@@ -1,19 +1,23 @@
 server:
-  port: 18084
+  port: 7001
 spring:
   application:
     name: content
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.211.132:3306/t_content?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://182.254.221.85:3306/t_content?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8
     username: root
-    password: 123456
+    password: ROOT_mysql_3306
 eureka:
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:7001/eureka
   instance:
+    hostname: 127.0.0.1
+    non-secure-port: 6000
     prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.non-secure-port}/eureka/
 feign:
   hystrix:
     enabled: true

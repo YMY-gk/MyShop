@@ -1,5 +1,13 @@
 server:
   port: 7000
+spring:
+  application:
+    name: goods
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://182.254.221.85:3306/t_goods?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8
+    username: root
+    password: ROOT_mysql_3306
 eureka:
   instance:
     hostname: 127.0.0.1
@@ -10,21 +18,23 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${eureka.instance.non-secure-port}/eureka/
-ribbon:
-  eureka:
-    enabled: true
-
-spring:
-  application:
-    name: goods
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://182.254.221.85:3306/t_content?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8
-    username: root
-    password: ROOT_mysql_3306
 feign:
   hystrix:
     enabled: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true  #开启驼峰功能
+
+#hystrix 配置
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          #如果enabled设置为false，则请求超时交给ribbon控制
+          enabled: true
+        isolation:
+          strategy: SEMAPHORE
 mybatis-plus:
   global-config:
     db-config:

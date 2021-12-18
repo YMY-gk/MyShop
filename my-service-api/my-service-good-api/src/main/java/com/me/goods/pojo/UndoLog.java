@@ -38,7 +38,7 @@ public class UndoLog extends Model<UndoLog> {
     private String xid;
 
     @TableField("rollback_info")
-    private Blob rollbackInfo;
+    private String rollbackInfo;
 
     @TableField("log_status")
     private Integer logStatus;
