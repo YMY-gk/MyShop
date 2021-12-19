@@ -1,4 +1,4 @@
-package com.me.goods.controller;
+package controller;
 
 import entity.Result;
 import entity.StatusCode;
