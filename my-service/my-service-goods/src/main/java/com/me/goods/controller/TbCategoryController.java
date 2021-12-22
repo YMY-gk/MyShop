@@ -25,7 +25,7 @@ import java.util.List;
  * @author guokui
  * @since 2021-10-11
  */
-@Controller
+@RestController
 @RequestMapping("/tb-category")
 public class TbCategoryController {
 

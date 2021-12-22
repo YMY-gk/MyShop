@@ -1,10 +1,8 @@
 spring:
-  application:
-    name: gateway-web
   cloud:
     gateway:
       globalcors:
-        cors-configurations:
+        corsConfigurations:
           '[/**]': # 匹配所有请求
             allowedOrigins: "*" #跨域处理 允许所有的域
             allowedMethods: # 支持的方法
@@ -12,14 +10,35 @@ spring:
               - POST
               - PUT
               - DELETE
+      routes:
+        - id: changgou_goods_route
+          uri: lb://goods
+          predicates:
+            - Path=/api/brand**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
+
+  application:
+    name: gateway-web
+  #Redis配置
+  redis:
+    host: 192.168.211.132
+    port: 6379
 server:
   port: 8001
 eureka:
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:6000/eureka
   instance:
+    hostname: 127.0.0.1
+    non-secure-port: 6001
     prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.non-secure-port}/eureka/
 management:
   endpoint:
     gateway:
