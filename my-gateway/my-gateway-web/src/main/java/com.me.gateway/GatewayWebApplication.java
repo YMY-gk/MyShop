@@ -2,6 +2,7 @@ package com.me.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
  * @date 2021/12/21 11:49
  */
 @SpringBootApplication
+//eureka的服务发现
 @EnableEurekaClient
 public class GatewayWebApplication {
 

@@ -6,7 +6,7 @@ spring:
   application:
     name: file
 server:
-  port: 15000
+  port: 7002
 eureka:
   client:
     service-url:

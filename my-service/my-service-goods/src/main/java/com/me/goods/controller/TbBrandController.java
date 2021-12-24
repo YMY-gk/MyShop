@@ -28,6 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/brand")
+@CrossOrigin
 public class TbBrandController {
     @Autowired
     private TbBrandServiceImpl  brandService;
@@ -40,7 +41,7 @@ public class TbBrandController {
      *
      * @return
      */
-    @GetMapping
+    @GetMapping("list")
     public Result< List< TbBrand > > findAll() {
 
         List<TbBrand> all = brandService.list();

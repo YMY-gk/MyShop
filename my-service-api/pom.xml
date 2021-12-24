@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>my-service-good-api</module>
+        <module>my-service-api-content</module>
+        <module>my-service-user-api</module>
     </modules>
 
     <properties>

@@ -11,30 +11,16 @@ spring:
 eureka:
   instance:
     hostname: 127.0.0.1
-    non-secure-port: 6001
+    secure-port: 6001
     prefer-ip-address: true
   client:
+    register-with-eureka: true   #是否将自己注册到eureka中
+    fetch-registry: true         #是否从eureka中获取信息
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.non-secure-port}/eureka/
-
-
-feign:
-  hystrix:
-    enabled: true
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.secure-port}/eureka/
 mybatis:
   configuration:
     map-underscore-to-camel-case: true  #开启驼峰功能
-
-#hystrix 配置
-hystrix:
-  command:
-    default:
-      execution:
-        timeout:
-          #如果enabled设置为false，则请求超时交给ribbon控制
-          enabled: true
-        isolation:
-          strategy: SEMAPHORE
 mybatis-plus:
   global-config:
     db-config:

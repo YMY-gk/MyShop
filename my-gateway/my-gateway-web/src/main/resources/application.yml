@@ -14,31 +14,35 @@ spring:
         - id: changgou_goods_route
           uri: lb://goods
           predicates:
-            - Path=/api/brand**
-          filters:
-            - StripPrefix=1
-            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
-              args:
-                key-resolver: "#{@ipKeyResolver}"
-                redis-rate-limiter.replenishRate: 1
-                redis-rate-limiter.burstCapacity: 1
+            - Path=/**
+#          filters:
+#            - StripPrefix=1
+#            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
+#              args:
+#                key-resolver: "#{@ipKeyResolver}"
+#                redis-rate-limiter.replenishRate: 1
+#                redis-rate-limiter.burstCapacity: 1
 
   application:
     name: gateway-web
   #Redis配置
   redis:
-    host: 192.168.211.132
+    host: 182.254.221.85
+    password: redis_6379
     port: 6379
+    timeout: 5000
 server:
   port: 8001
 eureka:
   instance:
     hostname: 127.0.0.1
-    non-secure-port: 6001
+    secure-port: 6001
     prefer-ip-address: true
   client:
+    register-with-eureka: true   #是否将自己注册到eureka中
+    fetch-registry: true         #是否从eureka中获取信息
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.non-secure-port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.secure-port}/eureka/
 management:
   endpoint:
     gateway:

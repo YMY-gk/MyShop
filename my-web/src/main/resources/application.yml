@@ -1,0 +1,12 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: goods
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6001/eureka/
+feign:
+  hystrix:
+    enabled: true
