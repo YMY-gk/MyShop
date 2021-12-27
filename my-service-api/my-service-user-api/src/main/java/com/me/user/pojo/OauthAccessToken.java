@@ -3,7 +3,6 @@ package com.me.user.pojo;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -30,7 +29,7 @@ public class OauthAccessToken extends Model<OauthAccessToken> {
     private String tokenId;
 
     @TableField("token")
-    private Blob token;
+    private String token;
 
     @TableId("authentication_id")
     private String authenticationId;
@@ -42,7 +41,7 @@ public class OauthAccessToken extends Model<OauthAccessToken> {
     private String clientId;
 
     @TableField("authentication")
-    private Blob authentication;
+    private String authentication;
 
     @TableField("refresh_token")
     private String refreshToken;

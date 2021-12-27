@@ -11,18 +11,28 @@ spring:
               - PUT
               - DELETE
       routes:
-        - id: changgou_goods_route
+        - id: goods_route
           uri: lb://goods
           predicates:
-            - Path=/**
-#          filters:
-#            - StripPrefix=1
-#            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
-#              args:
-#                key-resolver: "#{@ipKeyResolver}"
-#                redis-rate-limiter.replenishRate: 1
-#                redis-rate-limiter.burstCapacity: 1
-
+            - Path=/goods/**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
+        - id: user_route
+          uri: lb://user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
   application:
     name: gateway-web
   #Redis配置

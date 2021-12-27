@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -38,7 +37,7 @@ public class UndoLog extends Model<UndoLog> {
     private String xid;
 
     @TableField("rollback_info")
-    private Blob rollbackInfo;
+    private String rollbackInfo;
 
     @TableField("log_status")
     private Integer logStatus;

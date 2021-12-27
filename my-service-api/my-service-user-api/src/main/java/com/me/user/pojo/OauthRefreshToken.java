@@ -2,7 +2,6 @@ package com.me.user.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -29,10 +28,10 @@ public class OauthRefreshToken extends Model<OauthRefreshToken> {
     private String tokenId;
 
     @TableField("token")
-    private Blob token;
+    private String token;
 
     @TableField("authentication")
-    private Blob authentication;
+    private String authentication;
 
 
     @Override
