@@ -1,22 +1,27 @@
 package com.me.gateway.filter;
 
+import com.me.gateway.utils.JwtsUtils;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import utils.JwtsUtils;
 
 /**
  * @author guokui
  * @class MyShop
  * @date 2021/12/27 17:15
  */
+@Component
+@Slf4j
 public class AuthorizeFilter implements GlobalFilter, Ordered {
     //令牌头名字
     private static final String AUTHORIZE_TOKEN = "Authorization";
@@ -35,14 +40,13 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         //获取请求的URI
         String path = request.getURI().getPath();
-
+        log.info("请求参数{},请求路径{}",request,path);
         //如果是登录、goods等开放的微服务[这里的goods部分开放],则直接放行,这里不做完整演示，完整演示需要设计一套权限系统
         if (path.startsWith("/user/user/login") || path.startsWith("/user/brand/search/")) {
             //放行
             Mono<Void> filter = chain.filter(exchange);
             return filter;
         }
-
         //获取头文件中的令牌信息
         String tokent = request.getHeaders().getFirst(AUTHORIZE_TOKEN);
 
@@ -50,7 +54,11 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         if (StringUtils.isEmpty(tokent)) {
             tokent = request.getQueryParams().getFirst(AUTHORIZE_TOKEN);
         }
-
+        //获取cookie中token
+        HttpCookie cookie = request.getCookies().getFirst(AUTHORIZE_TOKEN);
+        if (cookie!=null&&StringUtils.isEmpty(tokent)){
+            tokent = cookie.getValue();
+        }
         //如果为空，则输出错误代码
         if (StringUtils.isEmpty(tokent)) {
             //设置方法不允许被访问，405错误代码
@@ -61,6 +69,8 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         //解析令牌数据
         try {
             Claims claims = JwtsUtils.parseJWT(tokent);
+            request.mutate().header(AUTHORIZE_TOKEN,claims.toString());
+            log.info(AUTHORIZE_TOKEN+":"+claims.toString());
         } catch (Exception e) {
             e.printStackTrace();
             //解析失败，响应401错误

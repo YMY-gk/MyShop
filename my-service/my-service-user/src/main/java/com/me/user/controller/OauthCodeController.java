@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
  * @since 2021-12-24
  */
 @Controller
-@RequestMapping("/oauth-code")
+@RequestMapping("/oauthcode")
 public class OauthCodeController {
 
 }

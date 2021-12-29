@@ -28,11 +28,7 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
-            - name: RequestRateLimiter #请求数限流 名字不能随便写 ，使用默认的facatory
-              args:
-                key-resolver: "#{@ipKeyResolver}"
-                redis-rate-limiter.replenishRate: 1
-                redis-rate-limiter.burstCapacity: 1
+
   application:
     name: gateway-web
   #Redis配置

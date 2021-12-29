@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
  * @since 2021-12-24
  */
 @Controller
-@RequestMapping("/oauth-access-token")
+@RequestMapping("/access")
 public class OauthAccessTokenController {
 
 }
