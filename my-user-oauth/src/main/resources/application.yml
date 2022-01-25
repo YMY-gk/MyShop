@@ -26,15 +26,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:6001/eureka
-auth:
-  ttl: 3600  #token存储到redis的过期时间
-  clientId: changgou
-  clientSecret: changgou
-  cookieDomain: localhost
-  cookieMaxAge: -1
-encrypt:
-  key-store:
-    location: classpath:/changgou.jks
-    secret: changgou
-    alias: changgou
-    password: changgou
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
