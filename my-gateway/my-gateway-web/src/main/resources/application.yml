@@ -28,7 +28,12 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
-
+        - id: user_oauth
+          uri: lb://userauth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
   application:
     name: gateway-web
   #Redis配置

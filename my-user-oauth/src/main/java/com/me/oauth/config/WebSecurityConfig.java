@@ -1,5 +1,6 @@
 package com.me.oauth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -9,67 +10,54 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ *  安全配置，过滤连的初始化和增加过滤连的配置口
+ */
 @Configuration
 @EnableWebSecurity
-@Order(-1)
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-    /***
-     * 忽略安全拦截的URL
-     * @param web
+    /**
+     * 操作数据库配置和忽略
+     * @param auth
      * @throws Exception
      */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(
-                "/user/login",
-                "/user/logout");
-    }
-
-    /***
-     * 创建授权管理认证对象
-     * @return
-     * @throws Exception
-     */
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager manager = super.authenticationManagerBean();
-        return manager;
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    /***
-     * 采用BCryptPasswordEncoder对密码进行编码
+    /**
+     * 密码处理
      * @return
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder(){
+        return  new BCryptPasswordEncoder();//没有加密
     }
 
-    /****
-     *
-     * @param http
-     * @throws Exception
-     */
     @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .httpBasic()        //启用Http基本身份验证
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/oauth/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()       //启用表单身份验证
+                .formLogin()
+                .permitAll()
                 .and()
-                .authorizeRequests()    //限制基于Request请求访问
-                .anyRequest()
-                .authenticated();       //其他请求都需要经过验证
+                .csrf().disable();
+    }
 
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
