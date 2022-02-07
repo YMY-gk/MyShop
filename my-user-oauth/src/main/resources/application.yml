@@ -15,9 +15,9 @@ spring:
         min-idle: 0
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://182.254.221.85:3306/t_oauth?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://182.254.221.85:3306/tb_user?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=UTC
     username: root
-    password: 123456
+    password: ROOT_mysql_3306
   main:
     allow-bean-definition-overriding: true
 eureka:

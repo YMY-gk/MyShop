@@ -34,6 +34,8 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("1-------开始执行拦截逻辑------------------------------------");
+
         //获取Request、Response对象
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
@@ -88,6 +90,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
      */
     @Override
     public int getOrder() {
+        log.info("1-------开始执行------------------------------------");
         return 0;
     }
 }

@@ -2,8 +2,14 @@ package com.me.oauth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+
+import java.security.KeyPair;
 
 /**
  * 令牌配置
@@ -32,7 +38,28 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @Configuration
 public class TokenConfig {
     @Bean
-    public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
+        return new JwtTokenStore(jwtAccessTokenConverter);
     }
+    /****
+     * JWT令牌转换器
+     * @param customUserAuthenticationConverter
+     * @return
+     */
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        KeyPair keyPair = new KeyStoreKeyFactory(
+                keyProperties.getKeyStore().getLocation(),                          //证书路径 changgou.jks
+                keyProperties.getKeyStore().getSecret().toCharArray())              //证书秘钥 changgouapp
+                .getKeyPair(
+                        keyProperties.getKeyStore().getAlias(),                     //证书别名 changgou
+                        keyProperties.getKeyStore().getPassword().toCharArray());   //证书密码 changgou
+        converter.setKeyPair(keyPair);
+        //配置自定义的CustomUserAuthenticationConverter
+        DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();
+        accessTokenConverter.setUserTokenConverter(customUserAuthenticationConverter);
+        return converter;
+    }
+
 }
