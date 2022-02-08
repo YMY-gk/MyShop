@@ -1,16 +1,9 @@
-package com.me.oauth.config;
+package com.me.user.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-import org.springframework.security.oauth2.provider.token.store.jwk.JwkTokenStore;
-
-import java.security.KeyPair;
 
 /**
  * 令牌配置
@@ -38,24 +31,8 @@ import java.security.KeyPair;
  */
 @Configuration
 public class TokenConfig {
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new InMemoryTokenStore();
-//    }
     @Bean
-    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
     }
-    /****
-     * JWT令牌转换器
-     * @param
-     * @return
-     */
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter( ) {
-        JwtAccessTokenConverter converter = new DefaultJwt();
-        converter.setSigningKey("www.javaboy.org");
-        return converter;
-    }
-
 }

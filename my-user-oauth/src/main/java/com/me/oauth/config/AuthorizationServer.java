@@ -13,9 +13,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.annotation.Resource;
 
@@ -36,22 +38,12 @@ class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Resource
     private UserDetailsService userDetailsService;
     @Resource
-    private PasswordEncoder passwordEncoder;
-    @Resource
     private TokenStore tokenStore;
 
     @Autowired
     private MyClientDetialService clientDetailsService;
-    @Bean
-    public AuthorizationServerTokenServices tokenService() {
-        DefaultTokenServices service=new DefaultTokenServices();
-        service.setClientDetailsService(clientDetailsService);
-        service.setSupportRefreshToken(true);
-        service.setTokenStore(tokenStore);
-        service.setAccessTokenValiditySeconds(7200); // 令牌默认有效期2小时
-        service.setRefreshTokenValiditySeconds(259200);// 刷新令牌默认有效期3天
-        return service;
-     }
+    @Autowired
+    private JwtAccessTokenConverter accessTokenConverter;
     /**
      * 用来配置令牌（token）的访问端点和令牌服务(token services)。
      * @param endpoints
@@ -59,9 +51,11 @@ class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager)
+        endpoints.accessTokenConverter(accessTokenConverter)
+                .authenticationManager(authenticationManager)
                 .tokenStore(tokenStore)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+                .setClientDetailsService(clientDetailsService);
     }
 
     /**

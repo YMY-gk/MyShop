@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/userx")
 public class AuthController {
 
-
+///tokenEndpoint.postAccessToken(principal, parameters).getBody()
     @PostMapping("/login")
     public Result login(String username, String password) {
         if(StringUtils.isEmpty(username)){
