@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @class MyShop
  * @date 2022/1/25 16:47
  */
-@Configuration
+
 @Slf4j
 public class LoginConfig implements WebMvcConfigurer {
 
@@ -21,7 +21,7 @@ public class LoginConfig implements WebMvcConfigurer {
         InterceptorRegistration registration = registry.addInterceptor(new AdminInterceptor());
         registration.addPathPatterns("/**");                      //所有路径都被拦截
         registration.excludePathPatterns(                         //添加不拦截路径
-                "/auth/userx/login",            //登录
+                "/oauth/**",            //登录
                 "/**/*.html",            //html静态资源
                 "/**/*.js",              //js静态资源
                 "/**/*.css",             //css静态资源

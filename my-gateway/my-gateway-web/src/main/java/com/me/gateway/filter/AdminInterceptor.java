@@ -24,7 +24,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        log.info("1---------请求参数："+JSONUtil.toJsonStr(request));
+        log.info("1---AdminInterceptor------请求参数："+JSONUtil.toJsonStr(request));
         return true;//如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
     }
 
@@ -33,7 +33,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        log.info("2---------执行了TestInterceptor的postHandle方法");
+        log.info("2-----AdminInterceptor----执行了TestInterceptor的postHandle方法");
     }
 
     /**
@@ -41,7 +41,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.info("3-------------执行了TestInterceptor的afterCompletion方法");
+        log.info("3-------AdminInterceptor------执行了TestInterceptor的afterCompletion方法");
 
     }
 
