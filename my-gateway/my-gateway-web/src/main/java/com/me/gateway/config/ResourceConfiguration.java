@@ -37,7 +37,7 @@ public class ResourceConfiguration extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/oauth/**") //表示配置请求路径
+                .antMatchers("/oauth/**","/user/**") //表示配置请求路径
                 .permitAll()// 指定 URL 无需保护。
                 .anyRequest().authenticated()
                 ;
